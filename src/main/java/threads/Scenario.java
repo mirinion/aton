@@ -26,12 +26,12 @@ public class Scenario {
 		}
 	}
 
-	public synchronized void say() {
+	public synchronized void read() {
 		try {
 			if (!phrases.isEmpty()) {
 				String nextActorName = phrases.peek().actorName;
 				if (nextActorName.equals(Thread.currentThread().getName())) {
-					System.out.println(nextActorName + ": " + phrases.poll().text);
+					((Actor) Thread.currentThread()).say(phrases.poll().text);
 					notifyAll();
 				} else {
 					wait();

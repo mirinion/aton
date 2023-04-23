@@ -11,7 +11,11 @@ public class Actor extends Thread {
 	@Override
 	public void run() {
 		while (!scenario.isEmpty()) {
-			scenario.say();
+			scenario.read();
 		}
+	}
+
+	public void say(String text) {
+		System.out.println(getName() + ": " + text);
 	}
 }
