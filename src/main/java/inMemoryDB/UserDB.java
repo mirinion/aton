@@ -4,7 +4,7 @@ import java.util.*;
 
 public class UserDB {
 	private final Map<Long, User> accountToUser = new HashMap<>();
-	private final Trie<User> nameToUserTrie = new Trie<>();
+	private final TrieOfSet<User> nameToUserTrieOfSet = new TrieOfSet<>();
 	private final Map<Double, Set<User>> valueToUser = new HashMap<>();
 
 	public void insert(User user) throws AccountAlreadyExistsException {
@@ -13,7 +13,7 @@ public class UserDB {
 					+ user.getAccount() + " already exists");
 		}
 		accountToUser.put(user.getAccount(), user);
-		nameToUserTrie.addValue(user.getName(), user);
+		nameToUserTrieOfSet.addValue(user.getName(), user);
 		insertIntoValueToUser(user);
 	}
 
@@ -31,7 +31,7 @@ public class UserDB {
 
 	public void delete(User user) {
 		accountToUser.remove(user.getAccount());
-		nameToUserTrie.removeValue(user.getName(), user);
+		nameToUserTrieOfSet.removeValue(user.getName(), user);
 		valueToUser.get(user.getValue()).remove(user);
 	}
 
@@ -45,7 +45,7 @@ public class UserDB {
 	}
 
 	public Set<User> selectWhereNameIs(String name) {
-		return nameToUserTrie.search(name);
+		return nameToUserTrieOfSet.search(name);
 	}
 
 	public void updateNameWhereAccountIs(long account, String newName) {
@@ -53,9 +53,9 @@ public class UserDB {
 		if (user == null || user.getName().equals(newName)) {
 			return;
 		}
-		nameToUserTrie.removeValue(user.getName(), user);
+		nameToUserTrieOfSet.removeValue(user.getName(), user);
 		user.setName(newName);
-		nameToUserTrie.addValue(newName, user);
+		nameToUserTrieOfSet.addValue(newName, user);
 	}
 
 	public void updateValueWhereAccountIs(long account, double newValue) {

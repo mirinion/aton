@@ -2,7 +2,7 @@ package inMemoryDB;
 
 import java.util.List;
 
-public class Main {
+public class Demo {
 	public static void main(String[] args) {
 		UserDB userDB = new UserDB();
 

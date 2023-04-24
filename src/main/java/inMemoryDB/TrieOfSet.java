@@ -2,7 +2,7 @@ package inMemoryDB;
 
 import java.util.*;
 
-public class Trie<T> {
+public class TrieOfSet<T> {
 	private Node<T> root;
 
 	public void addValue (String prefix, T value) {
@@ -31,15 +31,15 @@ public class Trie<T> {
 		return Collections.emptySet();
 	}
 
-	public boolean removeValue(String prefix, T value) {
+	public void removeValue(String prefix, T value) {
 		if (root == null) {
-			return false;
+			return;
 		}
 		Node<T> node = findNode(prefix);
 		if (node == null) {
-			return false;
+			return;
 		}
-		return node.getValues().remove(value);
+		node.getValues().remove(value);
 	}
 
 	private Node<T> findNode(String prefix) {
@@ -59,19 +59,19 @@ public class Trie<T> {
 		final Set<T> values = new HashSet<>();
 		final Map<Character, Node<T>> childrenMap = new HashMap<>();
 
-		public void addValue(T value) {
+		void addValue(T value) {
 			values.add(value);
 		}
 
-		public Set<T> getValues() {
+		Set<T> getValues() {
 			return values;
 		}
 
-		public void addChild(char c, Node<T> child) {
+		void addChild(char c, Node<T> child) {
 			childrenMap.put(c, child);
 		}
 
-		public Node<T> getChild(char c) {
+		Node<T> getChild(char c) {
 			return childrenMap.get(c);
 		}
 	}
