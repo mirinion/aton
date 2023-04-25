@@ -14,6 +14,5 @@ public class Main {
 		for (Actor actor : actors) {
 			actor.start();
 		}
-
 	}
 }

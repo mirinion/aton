@@ -3,16 +3,16 @@ package ru.mirinion.inMemoryDB;
 import java.util.*;
 
 public class UserDB {
-	private final Map<Long, User> accountToUser = new TreeMap<>();
-	private final Map<String, Set<User>> nameToUser = new TreeMap<>();
-	private final Map<Double, Set<User>> valueToUser = new TreeMap<>();
+	private final Map<Long, User> accountToUserMap = new TreeMap<>();
+	private final Map<String, Set<User>> nameToUserMap = new TreeMap<>();
+	private final Map<Double, Set<User>> valueToUserMap = new TreeMap<>();
 
 	public void insertAll(User user) throws AccountAlreadyExistsException {
-		if (accountToUser.containsKey(user.getAccount())) {
+		if (accountToUserMap.containsKey(user.getAccount())) {
 			throw new AccountAlreadyExistsException("Account "
 					+ user.getAccount() + " already exists");
 		}
-		accountToUser.put(user.getAccount(), user);
+		accountToUserMap.put(user.getAccount(), user);
 		putToValueToUser(user);
 		putToNameToUser(user);
 	}
@@ -25,7 +25,7 @@ public class UserDB {
 	}
 
 	public void delete(User user) {
-		accountToUser.remove(user.getAccount());
+		accountToUserMap.remove(user.getAccount());
 		removeFromNameToUser(user);
 		removeFromValueToUser(user);
 	}
@@ -38,20 +38,20 @@ public class UserDB {
 	}
 
 	public User selectWhereAccountIs(long account) {
-		return accountToUser.get(account);
+		return accountToUserMap.get(account);
 	}
 
 	public Set<User> selectWhereValueIs(double value) {
-		Set<User> result = valueToUser.get(value);
+		Set<User> result = valueToUserMap.get(value);
 		return result == null ? Collections.emptySet() : result;
 	}
 
 	public Set<User> selectWhereNameIs(String name) {
-		return nameToUser.get(name);
+		return nameToUserMap.get(name);
 	}
 
 	public void updateNameWhereAccountIs(long account, String newName) {
-		User user = accountToUser.get(account);
+		User user = accountToUserMap.get(account);
 		if (user == null || user.getName().equals(newName)) {
 			return;
 		}
@@ -61,7 +61,7 @@ public class UserDB {
 	}
 
 	public void updateValueWhereAccountIs(long account, double newValue) {
-		User user = accountToUser.get(account);
+		User user = accountToUserMap.get(account);
 		if (user == null || user.getValue() == newValue) {
 			return;
 		}
@@ -75,37 +75,37 @@ public class UserDB {
 		if (oldAccount == newAccount) {
 			return;
 		}
-		if (accountToUser.containsKey(newAccount)) {
+		if (accountToUserMap.containsKey(newAccount)) {
 			throw new AccountAlreadyExistsException("Account "
 					+ newAccount + " is occupied");
 		}
-		User user = accountToUser.get(oldAccount);
+		User user = accountToUserMap.get(oldAccount);
 		user.setAccount(newAccount);
-		accountToUser.remove(oldAccount);
-		accountToUser.put(newAccount, user);
+		accountToUserMap.remove(oldAccount);
+		accountToUserMap.put(newAccount, user);
 	}
 
 	private void putToValueToUser(User user) {
-		valueToUser.putIfAbsent(user.getValue(), new HashSet<>());
-		valueToUser.get(user.getValue()).add(user);
+		valueToUserMap.putIfAbsent(user.getValue(), new HashSet<>());
+		valueToUserMap.get(user.getValue()).add(user);
 	}
 
 	private void putToNameToUser(User user) {
-		nameToUser.putIfAbsent(user.getName(), new HashSet<>());
-		nameToUser.get(user.getName()).add(user);
+		nameToUserMap.putIfAbsent(user.getName(), new HashSet<>());
+		nameToUserMap.get(user.getName()).add(user);
 	}
 
 	private void removeFromValueToUser(User user) {
-		valueToUser.get(user.getValue()).remove(user);
-		if (valueToUser.get(user.getValue()).isEmpty()) {
-			valueToUser.remove(user.getValue());
+		valueToUserMap.get(user.getValue()).remove(user);
+		if (valueToUserMap.get(user.getValue()).isEmpty()) {
+			valueToUserMap.remove(user.getValue());
 		}
 	}
 
 	private void removeFromNameToUser(User user) {
-		nameToUser.get(user.getName()).remove(user);
-		if (nameToUser.get(user.getName()).isEmpty()) {
-			nameToUser.remove(user.getName());
+		nameToUserMap.get(user.getName()).remove(user);
+		if (nameToUserMap.get(user.getName()).isEmpty()) {
+			nameToUserMap.remove(user.getName());
 		}
 	}
 }
