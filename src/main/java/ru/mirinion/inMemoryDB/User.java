@@ -1,4 +1,4 @@
-package inMemoryDB;
+package ru.mirinion.inMemoryDB;
 
 import lombok.*;
 

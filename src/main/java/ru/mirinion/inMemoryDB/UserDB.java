@@ -1,38 +1,40 @@
-package inMemoryDB;
+package ru.mirinion.inMemoryDB;
 
 import java.util.*;
 
 public class UserDB {
-	private final Map<Long, User> accountToUser = new HashMap<>();
-	private final TrieOfSet<User> nameToUserTrieOfSet = new TrieOfSet<>();
-	private final Map<Double, Set<User>> valueToUser = new HashMap<>();
+	private final Map<Long, User> accountToUser = new TreeMap<>();
+	private final Map<String, Set<User>> nameToUser = new TreeMap<>();
+	private final Map<Double, Set<User>> valueToUser = new TreeMap<>();
 
-	public void insert(User user) throws AccountAlreadyExistsException {
+	public void insertAll(User user) throws AccountAlreadyExistsException {
 		if (accountToUser.containsKey(user.getAccount())) {
 			throw new AccountAlreadyExistsException("Account "
 					+ user.getAccount() + " already exists");
 		}
 		accountToUser.put(user.getAccount(), user);
-		nameToUserTrieOfSet.addValue(user.getName(), user);
-		insertIntoValueToUser(user);
+		putToValueToUser(user);
+		putToNameToUser(user);
 	}
 
-	public void insert(Collection<User> users)
+	public void insertAll(Collection<User> users)
 			throws AccountAlreadyExistsException {
 		for (User user : users) {
-			this.insert(user);
+			this.insertAll(user);
 		}
-	}
-
-	private void insertIntoValueToUser(User user) {
-		valueToUser.putIfAbsent(user.getValue(), new HashSet<>());
-		valueToUser.get(user.getValue()).add(user);
 	}
 
 	public void delete(User user) {
 		accountToUser.remove(user.getAccount());
-		nameToUserTrieOfSet.removeValue(user.getName(), user);
-		valueToUser.get(user.getValue()).remove(user);
+		removeFromNameToUser(user);
+		removeFromValueToUser(user);
+	}
+
+	public void delete(long account) {
+		User user = selectWhereAccountIs(account);
+		if (user != null) {
+			delete(user);
+		}
 	}
 
 	public User selectWhereAccountIs(long account) {
@@ -45,7 +47,7 @@ public class UserDB {
 	}
 
 	public Set<User> selectWhereNameIs(String name) {
-		return nameToUserTrieOfSet.search(name);
+		return nameToUser.get(name);
 	}
 
 	public void updateNameWhereAccountIs(long account, String newName) {
@@ -53,9 +55,9 @@ public class UserDB {
 		if (user == null || user.getName().equals(newName)) {
 			return;
 		}
-		nameToUserTrieOfSet.removeValue(user.getName(), user);
+		removeFromNameToUser(user);
 		user.setName(newName);
-		nameToUserTrieOfSet.addValue(newName, user);
+		putToValueToUser(user);
 	}
 
 	public void updateValueWhereAccountIs(long account, double newValue) {
@@ -63,14 +65,9 @@ public class UserDB {
 		if (user == null || user.getValue() == newValue) {
 			return;
 		}
-		double oldValue = user.getValue();
-		Set<User> oldValueUsersSet = selectWhereValueIs(oldValue);
-		oldValueUsersSet.remove(user);
-		if (oldValueUsersSet.isEmpty()) {
-			valueToUser.remove(oldValue);
-		}
+		removeFromValueToUser(user);
 		user.setValue(newValue);
-		insertIntoValueToUser(user);
+		putToValueToUser(user);
 	}
 
 	public void updateAccountWhereAccountIs(long oldAccount, long newAccount)
@@ -88,4 +85,27 @@ public class UserDB {
 		accountToUser.put(newAccount, user);
 	}
 
+	private void putToValueToUser(User user) {
+		valueToUser.putIfAbsent(user.getValue(), new HashSet<>());
+		valueToUser.get(user.getValue()).add(user);
+	}
+
+	private void putToNameToUser(User user) {
+		nameToUser.putIfAbsent(user.getName(), new HashSet<>());
+		nameToUser.get(user.getName()).add(user);
+	}
+
+	private void removeFromValueToUser(User user) {
+		valueToUser.get(user.getValue()).remove(user);
+		if (valueToUser.get(user.getValue()).isEmpty()) {
+			valueToUser.remove(user.getValue());
+		}
+	}
+
+	private void removeFromNameToUser(User user) {
+		nameToUser.get(user.getName()).remove(user);
+		if (nameToUser.get(user.getName()).isEmpty()) {
+			nameToUser.remove(user.getName());
+		}
+	}
 }

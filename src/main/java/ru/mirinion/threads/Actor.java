@@ -1,4 +1,4 @@
-package threads;
+package ru.mirinion.threads;
 
 public class Actor extends Thread {
 	private final Scenario scenario;

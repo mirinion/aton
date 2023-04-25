@@ -1,4 +1,4 @@
-package inMemoryDB;
+package ru.mirinion.inMemoryDB;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class Demo {
 		User u3 = new User(3, "Petrova Mariya", 20_000);
 
 		try {
-			userDB.insert(List.of(u1, u2, u3));
+			userDB.insertAll(List.of(u1, u2, u3));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -32,7 +32,7 @@ public class Demo {
 		System.out.println();
 
 		try {
-			userDB.insert(new User(3, "Denisova Olga", 30_000));
+			userDB.insertAll(new User(3, "Denisova Olga", 30_000));
 		} catch (Exception e) {
 			//выбросит исключение тк номер акк 3 уже занят
 			System.err.println(e.getMessage());
@@ -40,7 +40,7 @@ public class Demo {
 
 		try {
 			userDB.updateAccountWhereAccountIs(2, 5);
-			System.out.println(userDB.selectWhereAccountIs(2));
+			System.out.println(userDB.selectWhereAccountIs(2)); //null, тк account изменился с 2 на 5
 			System.out.println(userDB.selectWhereAccountIs(5));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -53,7 +53,7 @@ public class Demo {
 			System.err.println(e.getMessage());
 		}
 
-		userDB.delete(u1);
-		System.out.println(userDB.selectWhereAccountIs(1));
+		userDB.delete(3);
+		System.out.println(userDB.selectWhereAccountIs(3)); //null, тк мы удалили
 	}
 }

@@ -1,4 +1,4 @@
-package blackHat;
+package ru.mirinion.blackHat;
 
 public class Order {
 	ClientDetails clientDetails;

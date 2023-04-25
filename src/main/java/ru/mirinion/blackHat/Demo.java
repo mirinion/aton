@@ -1,4 +1,4 @@
-package blackHat;
+package ru.mirinion.blackHat;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

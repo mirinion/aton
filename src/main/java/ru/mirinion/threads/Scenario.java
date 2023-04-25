@@ -1,4 +1,4 @@
-package threads;
+package ru.mirinion.threads;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,20 +9,20 @@ public class Scenario {
 	private final Set<String> actorNamesSet = new HashSet<>();
 	private final Path path;
 
-	public Scenario(Path path) throws IOException {
+	public Scenario(Path path) {
 		this.path = path;
 		this.parse();
 	}
 
-	public void parse() throws IOException {
+	public void parse() {
 		try (Scanner in = new Scanner(path)) {
 			while (in.hasNext()) {
 				String[] lineParts = in.nextLine().split(":");
 				phrases.offer(new Phrase(lineParts[0], lineParts[1].trim()));
 				actorNamesSet.add(lineParts[0]);
 			}
-		} catch (Exception e) {
-			throw e;
+		} catch (Exception ex) {
+			System.err.println(ex);
 		}
 	}
 
@@ -37,8 +37,8 @@ public class Scenario {
 					wait();
 				}
 			}
-		} catch (Exception e){
-			e.printStackTrace();
+		} catch (Exception ex){
+			ex.printStackTrace();
 		}
 	}
 
@@ -50,14 +50,7 @@ public class Scenario {
 		return actorNamesSet;
 	}
 
-	public static class Phrase {
-		String actorName;
-		String text;
-
-		public Phrase(String actorName, String text) {
-			this.actorName = actorName;
-			this.text = text;
-		}
+	public record Phrase (String actorName, String text) {
 	}
 
 }
