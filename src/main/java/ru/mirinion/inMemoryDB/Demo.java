@@ -16,23 +16,30 @@ public class Demo {
 			System.err.println(e.getMessage());
 		}
 
-
-		userDB.updateNameWhereAccountIs(1, "Ivanov Igor");
-		System.out.println(userDB.selectWhereAccountIs(1));
-		System.out.println(userDB.selectWhereNameIs("Ivanov Igor"));
-		System.out.println(userDB.selectWhereValueIs(10_000));
-
-		System.out.println();
-
-		userDB.updateValueWhereAccountIs(3, 40_000.50);
-		System.out.println(userDB.selectWhereAccountIs(3));
-		System.out.println(userDB.selectWhereNameIs("Petrova Mariya"));
-		System.out.println(userDB.selectWhereValueIs(40_000.50));
+		System.out.println(userDB.selectWhereValueIs(20_000));
 
 		System.out.println();
 
 		try {
-			userDB.insertAll(new User(3, "Denisova Olga", 30_000));
+			userDB.updateNameWhereAccountIs(1, "Ivanov Igor");
+			System.out.println(userDB.selectWhereNameIs("Ivanov Igor"));
+		} catch (AccountAlreadyExistsException e) {
+			System.err.println(e.getMessage());
+		}
+
+		System.out.println();
+
+		try {
+			userDB.updateValueWhereAccountIs(3, 40_000.50);
+			System.out.println(userDB.selectWhereValueIs(40_000.50));
+		} catch (AccountAlreadyExistsException e) {
+			System.err.println(e.getMessage());
+		}
+
+		System.out.println();
+
+		try {
+			userDB.insert(new User(3, "Denisova Olga", 30_000));
 		} catch (Exception e) {
 			//выбросит исключение тк номер акк 3 уже занят
 			System.err.println(e.getMessage());
@@ -41,10 +48,13 @@ public class Demo {
 		try {
 			userDB.updateAccountWhereAccountIs(2, 5);
 			System.out.println(userDB.selectWhereAccountIs(2)); //null, тк account изменился с 2 на 5
+			System.out.println();
 			System.out.println(userDB.selectWhereAccountIs(5));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
+
+		System.out.println();
 
 		try {
 			userDB.updateAccountWhereAccountIs(1, 5);

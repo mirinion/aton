@@ -12,5 +12,4 @@ public class User {
 	private long account;
 	private String name;
 	private double value;
-
 }
