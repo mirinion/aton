@@ -3,7 +3,7 @@ package ru.mirinion.blackHat;
 import java.util.List;
 
 public class ClientsDB {
-	private final ClientsTrie<String> clientDetailsTrie = new ClientsTrie<>();
+	private final ClientsTrie clientDetailsTrie = new ClientsTrie();
 
 	public ClientsDB (List<Order> orders) {
 		for (Order order : orders) {
@@ -26,7 +26,7 @@ public class ClientsDB {
 	}
 
 	public String searchNameByPhoneNumber(String phoneNumber) {
-		return clientDetailsTrie.searchClient(
+		return clientDetailsTrie.searchClientName(
 				formatPhoneNumber(phoneNumber)
 		);
 	}

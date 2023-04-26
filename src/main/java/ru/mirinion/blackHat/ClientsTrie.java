@@ -1,12 +1,9 @@
 package ru.mirinion.blackHat;
 
-public class ClientsTrie<T> {
-	private Node root;
+public class ClientsTrie {
+	private final Node root = new Node(null);
 
 	public void addClient (String phone, String name) {
-		if (root == null) {
-			root = new Node(null);
-		}
 		Node parent = root;
 		for (int i = 0; i < phone.length(); i++) {
 			char c = phone.charAt(i);
@@ -17,13 +14,13 @@ public class ClientsTrie<T> {
 			}
 			parent = child;
 		}
-		parent.name = name;
+		parent.clientName = name;
 	}
 
-	public String searchClient (String phone) {
+	public String searchClientName(String phone) {
 		Node node = findNode(phone);
 		if (node != null) {
-			return node.name;
+			return node.clientName;
 		} else {
 			return null;
 		}
@@ -42,12 +39,13 @@ public class ClientsTrie<T> {
 	}
 
 	private static class Node {
-		String name;
+		String clientName;
 		Node[] childrenArr = new Node[10];
 
-		public Node(String  name) {
-			this.name = name;
+		public Node(String clientName) {
+			this.clientName = clientName;
 		}
+
 		void addChild(char c, Node child) {
 			childrenArr[c - '0'] = child;
 		}
