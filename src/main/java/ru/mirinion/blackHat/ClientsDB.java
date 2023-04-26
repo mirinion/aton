@@ -3,7 +3,7 @@ package ru.mirinion.blackHat;
 import java.util.List;
 
 public class ClientsDB {
-	private final ClientTrie<String> clientDetailsTrie = new ClientTrie<>();
+	private final ClientsTrie<String> clientDetailsTrie = new ClientsTrie<>();
 
 	public ClientsDB (List<Order> orders) {
 		for (Order order : orders) {

@@ -1,6 +1,6 @@
 package ru.mirinion.blackHat;
 
-public class ClientTrie<T> {
+public class ClientsTrie<T> {
 	private Node root;
 
 	public void addClient (String phone, String name) {
