@@ -3,8 +3,6 @@ package ru.mirinion.threads;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
 	private final static Path SCENARIO_PATH = Path.of("src/main/resources/scenario.txt");

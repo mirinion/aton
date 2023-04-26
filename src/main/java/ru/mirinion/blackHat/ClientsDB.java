@@ -7,7 +7,7 @@ public class ClientsDB {
 
 	public ClientsDB (List<Order> orders) {
 		for (Order order : orders) {
-			this.addClient(order.clientDetails);
+			this.addClient(order.clientDetails());
 		}
 	}
 

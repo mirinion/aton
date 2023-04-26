@@ -11,8 +11,13 @@ public class Demo {
 		//Список заказов (пример рандомных исходных данных)
 		List<Order> orders = readOrders();
 		ClientsDB clientsDB = new ClientsDB(orders);
+
+		//Пример поиска
 		System.out.println(clientsDB.searchNameByPhoneNumber("+7 (904) 886-10-63"));
 		System.out.println(clientsDB.searchNameByPhoneNumber("+7 (986) 088-30-22"));
+
+		//Номер, которого нет в базе
+		System.out.println(clientsDB.searchNameByPhoneNumber("+1 (111) 111-11-11"));
 	}
 
 	private static List<Order> readOrders() {
